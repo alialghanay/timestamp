@@ -32,8 +32,8 @@ app.get("/api/:data", (req, res) => {
     respone.utc = new Date(parseInt(data)).toUTCString();
     respone.unix = parseInt(data);
   }else {
+    respone.unix = Math.floor(new Date(data).getTime());
     respone.utc = new Date(data).toUTCString();
-    respone.unix = Math.floor(respone['utc'].getTime());
   }
   res.json(respone);
 })
