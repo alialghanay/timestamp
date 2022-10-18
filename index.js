@@ -27,15 +27,15 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:data", (req, res) => {
   const { data } = req.params;
-  let date = new Date(data);
-  let timestampInSeconds = Math.floor(date.getTime() / 1000);
-  console.log(timestampInSeconds)
-  if(isNaN(timestampInSeconds)){
-    console.log('in')
-    date = new Date(data * 1000);
-    timestampInSeconds = data;
+  let respone = {unix: 0, utc: ""};
+  if(data.indexOf("-") === -1){
+    respone.utc = new Date(data * 1).toUTCString();
+    respone.unix = data;
+  }else {
+    respone.utc = new Date(data);
+    respone.unix = Math.floor(respone['utc'].getTime());
   }
-  res.json({"unix": timestampInSeconds, 'utc': date.toUTCString()});
+  res.json(respone);
 })
 
 // listen for requests :)
