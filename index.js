@@ -19,18 +19,23 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
+var respone = {};
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api/", function (req, res) {
+  respone = {
+    unix: Math.floor(new Date().getTime()),
+    utc: new Date().toUTCString()
+  };
+  res.json(respone);
 });
 
 app.get("/api/:data", (req, res) => {
-  const { data } = req.params;
-  let respone = {unix: 0, utc: ""};
-  if(data.indexOf("-") === -1){
-    respone.utc = new Date(parseInt(data)).toUTCString();
+  let { data } = req.params;
+  console.log(data);
+  let check = new Date(data);
+  if(isNaN(check)){
     respone.unix = parseInt(data);
+    respone.utc = new Date(parseInt(data)).toUTCString();
   }else {
     respone.unix = Math.floor(new Date(data).getTime());
     respone.utc = new Date(data).toUTCString();
