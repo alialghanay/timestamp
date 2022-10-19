@@ -9,6 +9,7 @@ require("dotenv").config();
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
+const { json } = require('express');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
 // http://expressjs.com/en/starter/static-files.html
@@ -26,7 +27,7 @@ app.get("/api/", function (req, res) {
     unix: Math.floor(new Date().getTime()),
     utc: new Date().toUTCString()
   };
-  res.json(respone);
+  res.status(200).json(respone);
 });
 
 app.get("/api/:data", (req, res) => {
@@ -40,7 +41,9 @@ app.get("/api/:data", (req, res) => {
     respone.unix = Math.floor(new Date(data).getTime());
     respone.utc = new Date(data).toUTCString();
   }
-  res.json(respone);
+  if(isNaN(respone.unix)){
+    res.status(404).json({error: "Invalid Date"});      
+  } else res.status(200).json(respone);
 })
 
 // listen for requests :)
